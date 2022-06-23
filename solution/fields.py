@@ -33,4 +33,4 @@ class Talabat(BaseModel):
         item_image: str = None
 
     # We define it as a list of a complex type (like structs in C, C++)
-    menu_items: list[TalabatMenuItem]
+    menu_items: list[TalabatMenuItem] 
