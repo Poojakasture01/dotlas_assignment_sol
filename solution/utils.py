@@ -8,6 +8,7 @@ individually across different source files.
 from bs4 import BeautifulSoup
 import json
 
+
 def get_next_data(soup: BeautifulSoup) -> dict:
     """Retrieve application-wide data from a Next.js (React) page.
 

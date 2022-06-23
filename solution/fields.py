@@ -17,6 +17,7 @@ on the web page, and we still want the data to pass validation.
 
 from pydantic import BaseModel
 
+
 class Talabat(BaseModel):
     # Talabat class "extends" BaseModel from pydantic to force type restrictions
     restaurant_name: str
@@ -24,7 +25,7 @@ class Talabat(BaseModel):
     latitude: float
     longitude: float
     cuisine_tags: list[str] = None
-    
+
     # We define a separate model / class for menu items
     class TalabatMenuItem(BaseModel):
         item_name: str
@@ -33,4 +34,4 @@ class Talabat(BaseModel):
         item_image: str = None
 
     # We define it as a list of a complex type (like structs in C, C++)
-    menu_items: list[TalabatMenuItem] 
+    menu_items: list[TalabatMenuItem]

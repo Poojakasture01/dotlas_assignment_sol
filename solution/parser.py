@@ -27,8 +27,9 @@ def parse(soup: BeautifulSoup) -> Talabat:
         latitude=latitude,
         longitude=longitude,
         cuisine_tags=parse_cuisine_tags(nextjs_data),
-        menu_items=parse_menu(nextjs_data)
+        menu_items=parse_menu(nextjs_data),
     )
+
 
 def parse_center(next_data: dict) -> tuple[float, float]:
     """A function that parses the center coordinates of the restaurant from the
@@ -44,6 +45,7 @@ def parse_center(next_data: dict) -> tuple[float, float]:
     )
     return [float(coordinates_key["latitude"]), float(coordinates_key["longitude"])]
 
+
 def parse_restaurant_name(next_data: dict) -> str:
     """A function that parses the restaurant name from the next.js response
 
@@ -53,9 +55,12 @@ def parse_restaurant_name(next_data: dict) -> str:
     brand_name = (
         next_data["props"]["pageProps"]["gtmEventData"]["restaurant"]["name"]
         if next_data["props"]["pageProps"]["gtmEventData"].get("restaurant")
-        else next_data["props"]["pageProps"]["initialMenuState"]["restaurantObj"]["name"]
+        else next_data["props"]["pageProps"]["initialMenuState"]["restaurantObj"][
+            "name"
+        ]
     )
     return brand_name
+
 
 def parse_restaurant_logo(next_data: dict) -> str:
     """A function that parses the restaurant logo from the next.js response
@@ -64,11 +69,14 @@ def parse_restaurant_logo(next_data: dict) -> str:
     Returns: str: The restaurant logo as a URL text
     """
     logo = (
-            next_data["props"]["pageProps"]["gtmEventData"]["restaurant"]["logo"]
-            if next_data["props"]["pageProps"]["gtmEventData"].get("restaurant")
-            else next_data["props"]["pageProps"]["initialMenuState"]["restaurantObj"][ "logo"]
-        )
+        next_data["props"]["pageProps"]["gtmEventData"]["restaurant"]["logo"]
+        if next_data["props"]["pageProps"]["gtmEventData"].get("restaurant")
+        else next_data["props"]["pageProps"]["initialMenuState"]["restaurantObj"][
+            "logo"
+        ]
+    )
     return logo
+
 
 def parse_cuisine_tags(next_data: dict) -> list[str]:
     """A function that parses the cuisine tags from the next.js response
@@ -79,9 +87,12 @@ def parse_cuisine_tags(next_data: dict) -> list[str]:
     cuisine_str = (
         next_data["props"]["pageProps"]["gtmEventData"]["restaurant"]["cuisineString"]
         if next_data["props"]["pageProps"]["gtmEventData"].get("restaurant")
-        else next_data["props"]["pageProps"]["initialMenuState"]["restaurantObj"]["cuisineString"]
+        else next_data["props"]["pageProps"]["initialMenuState"]["restaurantObj"][
+            "cuisineString"
+        ]
     )
     return [cuisine.strip() for cuisine in cuisine_str.split(",")]
+
 
 def parse_menu(next_data: dict) -> list[Talabat.TalabatMenuItem]:
     """A function that parses the menu from the next.js response
@@ -89,9 +100,19 @@ def parse_menu(next_data: dict) -> list[Talabat.TalabatMenuItem]:
     Args: next_data (dict): The next.js response as a dictionary
     Returns: list[Talabat.TalabatMenuItem]: The menu as a list (array) of menu items
     """
-   
+
     try:
-        items = next_data.get("props").get("pageProps")["initialMenuState"]["menuData"]["items"]
-        return [ Talabat.TalabatMenuItem(item_name=item.get('name'), item_description=item.get('description') , item_price=item.get('price')  , item_image=item.get('image') ) for item in items ]
+        items = next_data.get("props").get("pageProps")["initialMenuState"]["menuData"][
+            "items"
+        ]
+        return [
+            Talabat.TalabatMenuItem(
+                item_name=item.get("name"),
+                item_description=item.get("description"),
+                item_price=item.get("price"),
+                item_image=item.get("image"),
+            )
+            for item in items
+        ]
     except Exception as e:
         return []
